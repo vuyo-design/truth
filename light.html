@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#151a2e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Light</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;800;900&family=Fraunces:ital,opsz,wght@0,9..144,400;1,9..144,400;1,9..144,500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#eef1f6; --surface:#ffffff; --surface-2:#e3e7f0; --ink:#1b2035; --muted:#5d6580;
+  --light:#b87a10; --light-soft:#f6e3b8; --line:#d3d8e4; --danger:#a3332b;
+  --glow:rgba(242,181,68,.45);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#151a2e; --surface:#1e2440; --surface-2:#272e4f; --ink:#f3eedf; --muted:#9aa1b8;
+    --light:#f2b544; --light-soft:#3a3320; --line:#2f3657; --danger:#e07a6f;
+    --glow:rgba(242,181,68,.55);
+    color-scheme:dark;
+  }
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{height:100%;-webkit-text-size-adjust:100%}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{min-height:100%;background:var(--bg);color:var(--ink);font-family:"Inter Tight",system-ui,-apple-system,sans-serif;font-size:17px;line-height:1.5;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--light);outline-offset:3px;border-radius:6px}
+.wrap{max-width:560px;margin:0 auto;padding:20px 20px 120px}
+.serif{font-family:"Fraunces",Georgia,serif}
+
+/* top */
+.top{display:flex;justify-content:space-between;align-items:baseline;padding:8px 0 24px}
+.wordmark{font-weight:900;letter-spacing:.32em;font-size:15px}
+.streak{color:var(--muted);font-size:14px}
+.streak b{color:var(--ink);font-weight:600}
+
+/* panic button: the one bold element */
+.hero{display:flex;flex-direction:column;align-items:center;text-align:center;padding:12px 0 36px}
+.panic{position:relative;width:min(64vw,250px);aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle at 50% 42%,#fff6dc 0%,#f6cf74 38%,#e09a1e 78%,#b46f08 100%);
+  color:#2a1c02;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  box-shadow:0 0 0 10px var(--light-soft),0 0 80px 10px var(--glow);transition:transform .15s}
+.panic:active{transform:scale(.96)}
+.panic span{font-weight:900;font-size:30px;letter-spacing:.04em}
+.panic small{font-weight:600;font-size:14px;opacity:.8;margin-top:2px}
+@media (prefers-reduced-motion:no-preference){
+  .panic::after{content:"";position:absolute;inset:-10px;border-radius:50%;border:2px solid var(--light);opacity:.6;animation:breathe 4s ease-in-out infinite}
+  @keyframes breathe{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.08);opacity:0}}
+}
+.hero p{margin-top:30px;color:var(--muted);max-width:30ch;font-size:15px}
+
+/* reminders */
+h2{font-size:24px;font-weight:800;letter-spacing:-.01em;margin-bottom:6px}
+.sub{color:var(--muted);font-size:15px;margin-bottom:18px}
+.reminder{background:var(--surface);border-left:4px solid var(--light);border-radius:4px 16px 16px 4px;padding:22px 22px 18px;min-height:150px;display:flex;flex-direction:column;justify-content:space-between}
+.reminder .serif{font-size:21px;line-height:1.45;font-style:italic}
+.rem-nav{display:flex;justify-content:space-between;align-items:center;margin-top:16px;color:var(--muted);font-size:14px}
+.rem-nav button{padding:8px 14px;border-radius:999px;background:var(--surface-2);font-weight:600;font-size:14px}
+section.block{margin-top:40px}
+
+.trio{display:grid;gap:2px;margin-top:6px;border-radius:16px;overflow:hidden}
+.trio div{background:var(--surface);padding:16px 20px}
+.trio dt{font-weight:600}
+.trio dd{color:var(--muted);font-size:15px}
+
+.letters{display:flex;gap:6px;margin-top:6px}
+.letters button{flex:1;background:var(--surface);border-radius:12px;padding:14px 4px 10px;text-align:center}
+.letters b{display:block;font-size:28px;font-weight:900;color:var(--light);line-height:1}
+.letters span{display:block;font-size:11px;color:var(--muted);margin-top:6px;line-height:1.2}
+
+/* method */
+.method-card{background:var(--surface);border-radius:20px;padding:22px;margin-bottom:14px;scroll-margin-top:20px}
+.mc-head{display:flex;gap:16px;align-items:flex-start}
+.big-letter{font-weight:900;font-size:52px;line-height:.85;color:var(--light);min-width:44px}
+.mc-head h3{font-size:20px;font-weight:800;line-height:1.2}
+.mc-head p{color:var(--muted);font-size:15px;margin-top:4px}
+.detail-btn{margin-top:16px;font-weight:600;font-size:15px;color:var(--light);padding:6px 0}
+.detail{display:none;margin-top:10px;border-top:1px solid var(--line);padding-top:16px}
+.detail.open{display:block}
+.detail h4{font-size:15px;font-weight:700;margin:18px 0 6px}
+.detail h4:first-child{margin-top:0}
+.detail p{margin-bottom:10px;font-size:16px}
+.detail .tag{font-weight:600}
+.verse{font-family:"Fraunces",Georgia,serif;font-style:italic;font-size:17px;line-height:1.55;padding:12px 16px;background:var(--light-soft);border-radius:12px;margin:12px 0}
+.verse cite{display:block;font-style:normal;font-family:"Inter Tight",sans-serif;font-size:13px;font-weight:600;margin-top:6px;color:var(--muted)}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.pair div{background:var(--surface-2);border-radius:12px;padding:12px 14px;font-size:15px}
+.pair strong{display:block;margin-bottom:4px}
+
+/* brothers */
+.bro{display:flex;align-items:center;gap:12px;background:var(--surface);border-radius:16px;padding:12px 14px;margin-bottom:8px}
+.bro .init{width:42px;height:42px;border-radius:50%;background:var(--light-soft);color:var(--light);display:grid;place-items:center;font-weight:800;flex:none}
+.bro .info{flex:1;min-width:0}
+.bro .name{font-weight:600}
+.bro input{width:100%;background:transparent;border:0;border-bottom:1px dashed var(--line);font-size:14px;color:var(--muted);padding:2px 0}
+.bro a{text-decoration:none;font-weight:600;font-size:14px;padding:8px 12px;border-radius:999px;background:var(--surface-2);color:var(--ink)}
+.bro a.call{background:var(--light);color:#2a1c02}
+.bro a[aria-disabled="true"]{opacity:.35;pointer-events:none}
+
+/* why */
+.photos{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+.photos figure{position:relative;aspect-ratio:1;border-radius:14px;overflow:hidden;background:var(--surface-2)}
+.photos img{width:100%;height:100%;object-fit:cover}
+.photos button.rm{position:absolute;top:6px;right:6px;width:26px;height:26px;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;font-size:14px}
+.add-photo{aspect-ratio:1;border-radius:14px;border:2px dashed var(--line);display:grid;place-items:center;color:var(--muted);font-size:14px;font-weight:600;text-align:center;padding:8px}
+textarea{width:100%;min-height:120px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;font-size:16px;resize:vertical}
+label.lbl{display:block;font-weight:600;margin:20px 0 8px}
+
+/* nav */
+nav.tabs{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);
+  padding:8px 8px calc(8px + env(safe-area-inset-bottom,0px));display:flex;justify-content:center;z-index:5}
+nav.tabs .in{display:flex;max-width:560px;width:100%}
+nav.tabs button{flex:1;padding:8px 4px;font-size:13px;font-weight:600;color:var(--muted);border-radius:10px}
+nav.tabs button[aria-current="page"]{color:var(--ink);background:var(--surface-2)}
+.view{display:none}.view.active{display:block}
+
+/* panic overlay */
+#flow{position:fixed;inset:0;z-index:20;display:none;flex-direction:column;background:#0f1324;color:#f3eedf;
+  padding:calc(20px + env(safe-area-inset-top,0px)) 24px calc(24px + env(safe-area-inset-bottom,0px))}
+#flow.on{display:flex}
+#flow.lit{background:radial-gradient(circle at 50% 40%,#3b3013 0%,#0f1324 70%)}
+.flow-top{display:flex;justify-content:space-between;align-items:center;font-size:14px;color:#9aa1b8;min-height:32px}
+.flow-top button{padding:6px 10px;color:#9aa1b8}
+.flow-body{flex:1;display:flex;flex-direction:column;justify-content:center;max-width:520px;width:100%;margin:0 auto}
+.count{font-weight:900;font-size:min(48vw,260px);line-height:1;text-align:center;color:#f2b544;text-shadow:0 0 60px rgba(242,181,68,.6)}
+@media (prefers-reduced-motion:no-preference){.count.pop{animation:pop .9s ease-out}@keyframes pop{0%{transform:scale(1.6);opacity:0}25%{opacity:1}100%{transform:scale(1);opacity:1}}}
+.step-n{color:#f2b544;font-weight:600;font-size:15px;margin-bottom:10px}
+.flow-body h1{font-size:clamp(38px,11vw,58px);font-weight:900;line-height:1.02;letter-spacing:-.02em}
+.flow-body .say{font-size:19px;color:#c9cbd6;margin-top:16px;max-width:34ch}
+.flow-body .verse{background:rgba(242,181,68,.12);color:#f3eedf}
+.flow-body .verse cite{color:#9aa1b8}
+.actions{display:grid;gap:10px;margin-top:20px}
+.btn{display:block;width:100%;text-align:center;padding:18px;border-radius:16px;font-weight:800;font-size:18px;text-decoration:none}
+.btn.go{background:#f2b544;color:#2a1c02}
+.btn.ghost{background:rgba(255,255,255,.08);color:#f3eedf}
+.btn.quiet{background:none;color:#9aa1b8;font-weight:600;font-size:16px;padding:12px}
+.move-card{margin-top:22px;background:rgba(255,255,255,.06);border-radius:18px;padding:20px}
+.move-card strong{font-size:24px;display:block;line-height:1.2}
+.move-card span{color:#9aa1b8;font-size:15px}
+.flow-bros{display:grid;gap:8px;margin-top:20px}
+.flow-bros a{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-radius:14px;background:rgba(255,255,255,.07);color:#f3eedf;text-decoration:none;font-weight:600}
+.flow-bros a small{color:#f2b544}
+.flow-photos{display:flex;gap:8px;margin-top:18px;overflow-x:auto}
+.flow-photos img{width:96px;height:96px;object-fit:cover;border-radius:14px;flex:none}
+.why-quote{font-family:"Fraunces",Georgia,serif;font-style:italic;font-size:21px;line-height:1.45;margin-top:16px;white-space:pre-line}
+.ring{display:block;margin:20px auto 0;width:220px;height:220px}
+.ring text{fill:#f3eedf;font-family:"Inter Tight",sans-serif;font-weight:800;font-size:40px}
+.list{margin-top:14px}
+.list p{padding:12px 0;border-bottom:1px solid rgba(255,255,255,.08);font-size:17px}
+.list p b{color:#f2b544}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <span class="wordmark">LIGHT</span>
+    <span class="streak" id="streak"></span>
+  </header>
+
+  <!-- HOME -->
+  <main class="view active" id="v-home">
+    <div class="hero">
+      <button class="panic" id="panicBtn" aria-label="Start the panic protocol">
+        <span>PANIC</span>
+        <small>1, 2, 3, go</small>
+      </button>
+      <p>Feel the pull? Press it before the boulder moves. Don't negotiate, don't take one more scroll.</p>
+    </div>
+
+    <section>
+      <h2>Remember</h2>
+      <p class="sub">Read one before you do anything else tonight.</p>
+      <div class="reminder">
+        <p class="serif" id="remText"></p>
+        <div class="rem-nav">
+          <span id="remCount"></span>
+          <button id="remNext">Next reminder</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="block">
+      <h2>Never forget</h2>
+      <dl class="trio">
+        <div><dt>Who you are</dt><dd>A free man. Not a slave to what you want in the moment.</dd></div>
+        <div><dt>Whose you are</dt><dd>Christ's. Your identity is tied to Him, not to this habit.</dd></div>
+        <div><dt>Who you're doing it for</dt><dd id="whoShort">Your future wife, your future kids, your purpose.</dd></div>
+      </dl>
+    </section>
+
+    <section class="block">
+      <h2>The LIGHT method</h2>
+      <p class="sub">Align your beliefs, your behaviours and your brothers.</p>
+      <div class="letters">
+        <button data-jump="L"><b>L</b><span>Locate the root</span></button>
+        <button data-jump="I"><b>I</b><span>Interrupt the pattern</span></button>
+        <button data-jump="G"><b>G</b><span>Guard the gates</span></button>
+        <button data-jump="H"><b>H</b><span>Hide nothing</span></button>
+        <button data-jump="T"><b>T</b><span>Train the replacement</span></button>
+      </div>
+    </section>
+  </main>
+
+  <!-- METHOD -->
+  <main class="view" id="v-method">
+    <h2>The LIGHT method</h2>
+    <p class="sub">If you align your beliefs, behaviours and brothers, you will defeat it.</p>
+
+    <article class="method-card" id="m-L">
+      <div class="mc-head"><span class="big-letter">L</span><div>
+        <h3>Locate the root</h3>
+        <p>It's never really about lust. It's about the gap you're trying to fill.</p>
+      </div></div>
+      <button class="detail-btn" aria-expanded="false">In detail</button>
+      <div class="detail">
+        <h4>What keeps bringing you back</h4>
+        <p>You know your purpose and you're on it. For a long time that alone silenced the demon. Now it comes back every so often, louder, because it knows more about you.</p>
+        <p>You're living in your dream city, in your dream job, and the relationship is going well. Strangely, that's the danger. The closer you get to your purpose, the more the uncertainty scares you.</p>
+        <h4>Your root</h4>
+        <p><span class="tag">Uncertainty.</span> The enemy plants doubt about your dreams, and you fill that uncomfortable space with porn, with alcohol, with going out. You do it because you're afraid to go deeper.</p>
+        <p>When you've escaped it before, you loved more than you ever had and saw things a lustful man never gets access to. That's what's on the other side.</p>
+        <h4>Ask yourself when it hits</h4>
+        <p>What am I uncertain about right now? What am I avoiding? Name that, not the urge.</p>
+      </div>
+    </article>
+
+    <article class="method-card" id="m-I">
+      <div class="mc-head"><span class="big-letter">I</span><div>
+        <h3>Interrupt the pattern</h3>
+        <p>The urge will come. It's a forever war. Break the chain before it breaks you.</p>
+      </div></div>
+      <button class="detail-btn" aria-expanded="false">In detail</button>
+      <div class="detail">
+        <h4>You are not your urges</h4>
+        <p>Most men live in fusion: I have an urge, so I act on it, like a dog. Acceptance and Commitment Therapy says you're separate from your urges. They're just there. Not good, not bad. An urge rises, peaks and falls away.</p>
+        <h4>The boulder</h4>
+        <p>Picture a boulder at the top of a peak with you at the bottom. However long you let the urge sit is how hard the boulder gets pushed. Once it gets a nudge it picks up speed, and there's no outrunning it. You get crushed.</p>
+        <p>"One more scroll, one more video" is a lie. It's 1, 2, 3, go, or you're falling.</p>
+        <h4>Your specific triggers</h4>
+        <p><span class="tag">Time:</span> late at night, lights off, before bed.</p>
+        <p><span class="tag">Place:</span> the bedroom or bathroom, or watching football alone at night.</p>
+        <p><span class="tag">Emotion:</span> alone, or hungover with self control out the window.</p>
+        <p><span class="tag">Behaviour:</span> scrolling Instagram, then Twitter, then something shows too much, then a video, then it's done. You scroll because you want the algorithm to show you this.</p>
+        <p><span class="tag">Physical state:</span> tired, weary, or scared of approaching something. And 100% of the time, social media is involved.</p>
+        <h4>Your response has to be</h4>
+        <p><span class="tag">Physical:</span> stand up, leave the room, turn the phone off, walk, call someone, do push-ups, read the Bible away from the device.</p>
+        <p><span class="tag">Immediate:</span> because of the boulder. No delay.</p>
+        <p><span class="tag">Distancing:</span> get the device away from you. If you're lonely, call someone, but the phone goes.</p>
+        <h4>If-then protocols</h4>
+        <p><span class="tag">Night:</span> phone away while watching football at home, or don't watch it.</p>
+        <p><span class="tag">Alcohol:</span> hungover is when you fall most. Don't get drunk.</p>
+        <p><span class="tag">Scroll:</span> block Twitter, remove the account. It will never work for you.</p>
+        <p><span class="tag">If you fall:</span> tell your brothers and work back through this framework for a full 7-day cycle.</p>
+      </div>
+    </article>
+
+    <article class="method-card" id="m-G">
+      <div class="mc-head"><span class="big-letter">G</span><div>
+        <h3>Guard the gates</h3>
+        <p>The highest return of anything here. Nail this and 90 to 95% of it goes.</p>
+      </div></div>
+      <button class="detail-btn" aria-expanded="false">In detail</button>
+      <div class="detail">
+        <h4>You're a fort</h4>
+        <p>Strong, fortified. But drop the drawbridge in one area, usually by getting drunk, and the enemy walks in and wrecks the place. It's rarely lust that starts it. It's a crack in the wall you never mended.</p>
+        <div class="verse">A man without self control is like a city broken into and left without walls.<cite>Proverbs 25:28</cite></div>
+        <h4>Your gates</h4>
+        <p>Mindless scrolling on Instagram and Twitter. Being hungover, sometimes for days while your willpower rebuilds. Gluttony and overconsumption, whether food or content. Being lonely with free time and nothing to do. The same app, the same room, the same time.</p>
+        <h4>Cut it out before the urge hits</h4>
+        <p>Phone out of the bedroom, or at least out of reach. Delete the app. Install a blocker like Opal or Covenant Eyes. No screens after a set time. Clean up and monitor your feeds. Fast when overconsumption creeps in.</p>
+        <div class="verse">If your right eye causes you to sin, tear it out and throw it away. It is better that you lose one of your members than that your whole body be thrown into hell.<cite>Matthew 5:29</cite></div>
+        <p>Good intentions are not a good enough guard. Don't talk about your hopes. Talk about your decisions and your actions. And don't be too proud: you don't have the willpower to fight this head on.</p>
+        <p>Keep pictures of the people you love, and reminders, in your spaces.</p>
+      </div>
+    </article>
+
+    <article class="method-card" id="m-H">
+      <div class="mc-head"><span class="big-letter">H</span><div>
+        <h3>Hide nothing</h3>
+        <p>Secrecy is the enemy's greatest weapon. Freedom starts in the light.</p>
+      </div></div>
+      <button class="detail-btn" aria-expanded="false">In detail</button>
+      <div class="detail">
+        <h4>Go to the medic</h4>
+        <p>A soldier wounded in battle who won't go to the medic gets slower and eventually bleeds out. He could've just gone. Lust festers in the dark, alone, in shame and pride.</p>
+        <h4>Condemnation versus conviction</h4>
+        <div class="pair">
+          <div><strong>Condemnation</strong>Attacks your identity. Shame, isolate, self sabotage, feel unworthy, repeat. It leaves you drained and believing you are the sin.</div>
+          <div><strong>Conviction</strong>Attacks the sin, not you. You grieve how evil it is, then bring it to God. Your identity is in Christ, not in the habit.</div>
+        </div>
+        <p>The cycle that breaks it: sorrow, then repentance, then confession to God and your brothers, then mercy, then grace.</p>
+        <div class="verse">Whoever conceals his transgressions will not prosper, but he who confesses and forsakes them will obtain mercy.<cite>Proverbs 28:13</cite></div>
+        <h4>Confession needs three things</h4>
+        <p><span class="tag">Speed:</span> immediately. <span class="tag">Specifics:</span> describe it, even when it's uncomfortable. <span class="tag">Support:</span> men who'll tell you what this does to you and your future marriage, not men who say "it's okay."</p>
+        <h4>Cross carriers</h4>
+        <p>Brothers who share a vision and talk about deep things. They help you carry the cross. You need them.</p>
+      </div>
+    </article>
+
+    <article class="method-card" id="m-T">
+      <div class="mc-head"><span class="big-letter">T</span><div>
+        <h3>Train the replacement</h3>
+        <p>The life changer. Pull the weed and plant something in its place.</p>
+      </div></div>
+      <button class="detail-btn" aria-expanded="false">In detail</button>
+      <div class="detail">
+        <h4>Get the roots</h4>
+        <p>Most men cut off the leaves and the branch while the roots stay deep. Whatever you pull out has to be replaced.</p>
+        <h4>Do I have what it takes?</h4>
+        <p>Can I handle the pressure? Can I protect the people I love? Can I be trusted? When you fall, at some point you've decided the answer is no. You feel the wound, things get hard, you feel overlooked or rejected or uncertain, and you reach for the quick fix.</p>
+        <div class="pair">
+          <div><strong>What lust promises</strong>Conquest, reward, power. A fake sense of manhood.</div>
+          <div><strong>What it gives you</strong>Shame, no change and a deeper wound. And it's never enough.</div>
+        </div>
+        <h4>Stop answering with a counterfeit</h4>
+        <p>Build agency. Take dominion and rule over your world and your tribe. Build a life you don't need to escape from. And surrender control: alone you don't have what it takes for your salvation.</p>
+        <div class="verse">Flee youthful passions and pursue righteousness, faith, love, and peace, along with those who call on the Lord from a pure heart.<cite>2 Timothy 2:22</cite></div>
+        <div class="pair">
+          <div><strong>Flee</strong>Lust, laziness, lack of discipline</div>
+          <div><strong>Pursue</strong>Righteousness, purpose, impact</div>
+        </div>
+        <h4>Replace pleasure with purpose</h4>
+        <p>If you fall, you're saying pleasure outweighs purpose in your life. Once you're moving, momentum is your best friend. Gym. Running. Waking when you say. Sleeping when you say. Time passes either way; some men compound and others stay the same. Pick which one you are.</p>
+      </div>
+    </article>
+  </main>
+
+  <!-- BROTHERS -->
+  <main class="view" id="v-brothers">
+    <h2>Your brothers</h2>
+    <p class="sub">Cross carriers. Add their numbers once so you can call in one tap when it counts.</p>
+    <div id="broList"></div>
+  </main>
+
+  <!-- WHY -->
+  <main class="view" id="v-why">
+    <h2>Who you're doing it for</h2>
+    <p class="sub">Remind yourself of them often. These show up in the middle of every panic.</p>
+    <div class="photos" id="photos"></div>
+    <input type="file" id="photoInput" accept="image/*" hidden>
+    <label class="lbl" for="whyText">In your own words</label>
+    <textarea id="whyText"></textarea>
+    <label class="lbl" for="purposeText">Your purpose</label>
+    <textarea id="purposeText"></textarea>
+  </main>
+</div>
+
+<nav class="tabs" aria-label="Sections"><div class="in">
+  <button data-view="home" aria-current="page">Home</button>
+  <button data-view="method">Method</button>
+  <button data-view="brothers">Brothers</button>
+  <button data-view="why">Why</button>
+</div></nav>
+
+<!-- PANIC FLOW -->
+<div id="flow" role="dialog" aria-modal="true" aria-label="Panic protocol">
+  <div class="flow-top"><span id="flowStep"></span><button id="flowClose">Close</button></div>
+  <div class="flow-body" id="flowBody"></div>
+</div>
+
+<script>
+/* storage: works on your own site, falls back to memory in previews */
+const mem={};
+const store={
+  get(k,d){try{const v=localStorage.getItem('light:'+k);return v!==null?JSON.parse(v):(k in mem?mem[k]:d)}catch(e){return k in mem?mem[k]:d}},
+  set(k,v){mem[k]=v;try{localStorage.setItem('light:'+k,JSON.stringify(v))}catch(e){}}
+};
+
+/* reminders */
+const reminders=[
+  "Satan can't get to God, so he goes after what God loves most. You. Every time you give in, he's using God's greatest creation to mock Him.",
+  "Al Goldstein, one of the men who built the modern porn industry, said openly that he did it out of contempt for Christ. That's what you're feeding.",
+  "Every time you look, it's a spit in the face of Christ and a small win for the enemy. Let that hit you like a dagger.",
+  "A double life keeps you enslaved. Stop reinforcing the identity of a man who can't control his desires.",
+  "Your willpower is not the weapon. The strongest and wisest men in the Bible fell to this. Flee. That's the only way to beat it.",
+  "Your future wife deserves a husband who can see all of her. A lustful man never gets access to those parts. Your future kids deserve a free father.",
+  "This is a monster that grows. You don't want to meet it as a full grown beast. Kill it while it's small.",
+  "God is always at work taking you where He wants you. The enemy is always at work pulling you off your purpose and stealing your confidence in Christ.",
+  "You need brothers who hold you accountable, and you need to speak to them often. Not when it's already too late."
+];
+let ri=Math.floor(Math.random()*reminders.length);
+function showRem(){document.getElementById('remText').textContent=reminders[ri];document.getElementById('remCount').textContent=(ri+1)+' of '+reminders.length}
+document.getElementById('remNext').onclick=()=>{ri=(ri+1)%reminders.length;showRem()};
+showRem();
+
+/* streak */
+if(!store.get('since',null))store.set('since',Date.now());
+function renderStreak(){
+  const d=Math.floor((Date.now()-store.get('since',Date.now()))/86400000);
+  const w=store.get('wins',0);
+  document.getElementById('streak').innerHTML='<b>'+d+'</b> '+(d===1?'day':'days')+' in the light'+(w?' &nbsp;<b>'+w+'</b> held':'');
+}
+renderStreak();
+
+/* tabs */
+function go(view){
+  document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id==='v-'+view));
+  document.querySelectorAll('nav.tabs button').forEach(b=>{if(b.dataset.view===view)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')});
+  window.scrollTo(0,0);
+}
+document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>go(b.dataset.view));
+document.querySelectorAll('[data-jump]').forEach(b=>b.onclick=()=>{
+  go('method');const card=document.getElementById('m-'+b.dataset.jump);
+  openDetail(card,true);card.scrollIntoView({behavior:'smooth'});
+});
+function openDetail(card,force){
+  const btn=card.querySelector('.detail-btn'),d=card.querySelector('.detail');
+  const open=force===true?true:!d.classList.contains('open');
+  d.classList.toggle('open',open);btn.setAttribute('aria-expanded',open);btn.textContent=open?'Show less':'In detail';
+}
+document.querySelectorAll('.method-card').forEach(c=>c.querySelector('.detail-btn').onclick=()=>openDetail(c));
+
+/* brothers */
+const brothers=['Adam','Chris','Chinedu','Jaden','Oli Rose','Hamadzi'];
+function renderBros(){
+  const nums=store.get('nums',{});const el=document.getElementById('broList');el.innerHTML='';
+  brothers.forEach(n=>{
+    const num=nums[n]||'';const row=document.createElement('div');row.className='bro';
+    row.innerHTML='<span class="init">'+n[0]+'</span><div class="info"><div class="name">'+n+'</div><input inputmode="tel" placeholder="Add number" aria-label="'+n+' phone number"></div>'+
+      '<a class="call" '+(num?'href="tel:'+num+'"':'aria-disabled="true"')+'>Call</a><a '+(num?'href="sms:'+num+'"':'aria-disabled="true"')+'>Text</a>';
+    const inp=row.querySelector('input');inp.value=num;
+    inp.onchange=()=>{const x=store.get('nums',{});x[n]=inp.value.trim();store.set('nums',x);renderBros()};
+    el.appendChild(row);
+  });
+}
+renderBros();
+
+/* why */
+const whyDefault="My future wife, who deserves a husband who can see all of her.\nMy future kids, who deserve a free father.\nThe people I love right now.";
+const purposeDefault="I'm living in my dream city, doing work I believe in. I'm getting closer to my purpose, and I won't trade it for a quick fix.";
+const whyEl=document.getElementById('whyText'),purEl=document.getElementById('purposeText');
+whyEl.value=store.get('why',whyDefault);purEl.value=store.get('purpose',purposeDefault);
+whyEl.oninput=()=>store.set('why',whyEl.value);purEl.oninput=()=>store.set('purpose',purEl.value);
+
+function renderPhotos(){
+  const ph=store.get('photos',[]);const el=document.getElementById('photos');el.innerHTML='';
+  ph.forEach((src,i)=>{const f=document.createElement('figure');f.innerHTML='<img alt="Someone you love"><button class="rm" aria-label="Remove photo">×</button>';
+    f.querySelector('img').src=src;f.querySelector('.rm').onclick=()=>{const p=store.get('photos',[]);p.splice(i,1);store.set('photos',p);renderPhotos()};el.appendChild(f)});
+  if(ph.length<6){const a=document.createElement('button');a.className='add-photo';a.textContent='Add a photo';a.onclick=()=>document.getElementById('photoInput').click();el.appendChild(a)}
+}
+document.getElementById('photoInput').onchange=e=>{
+  const file=e.target.files[0];if(!file)return;const r=new FileReader();
+  r.onload=()=>{const img=new Image();img.onload=()=>{
+    const s=360,c=document.createElement('canvas');const sc=Math.max(s/img.width,s/img.height);
+    c.width=s;c.height=s;const x=c.getContext('2d');const w=img.width*sc,h=img.height*sc;
+    x.drawImage(img,(s-w)/2,(s-h)/2,w,h);const p=store.get('photos',[]);p.push(c.toDataURL('image/jpeg',.75));store.set('photos',p);renderPhotos();
+  };img.src=r.result};r.readAsDataURL(file);e.target.value='';
+};
+renderPhotos();
+
+/* panic flow */
+const flow=document.getElementById('flow'),body=document.getElementById('flowBody'),stepLbl=document.getElementById('flowStep');
+const moves=[
+  ["Drop and do 25 push-ups","Right now, on the floor where you are."],
+  ["Go for a walk","Shoes on, out the door. Ten minutes minimum. Leave the phone."],
+  ["Leave the room","Kitchen, living room, anywhere with the lights on. Not the bedroom."],
+  ["Open your Bible","In a different room, away from every screen."],
+  ["Call a brother","Not a text. A call. Next screen shows who."],
+  ["Turn the phone off","Fully off. Put it in another room and walk away from it."]
+];
+let timer=null,cdTimer=null;
+const TOTAL=7;
+function setStep(n){stepLbl.textContent=n?('Step '+n+' of '+TOTAL):''}
+function verse(t,c){return '<div class="verse">'+t+'<cite>'+c+'</cite></div>'}
+
+function startPanic(){
+  flow.classList.add('on');flow.classList.remove('lit');document.body.style.overflow='hidden';
+  setStep(0);let n=3;
+  const show=v=>{body.innerHTML='<div class="count pop">'+v+'</div>';if(navigator.vibrate)navigator.vibrate(80)};
+  show(n);
+  cdTimer=setInterval(()=>{n--;if(n>0)show(n);else if(n===0){show('GO');flow.classList.add('lit')}else{clearInterval(cdTimer);s1()}},900);
+}
+function s1(){setStep(1);body.innerHTML='<p class="step-n">Immediately</p><h1>Stand up. Now.</h1><p class="say">Get out of bed. Off the sofa. Don\'t negotiate and don\'t take one more scroll. The boulder hasn\'t moved yet.</p><div class="actions"><button class="btn go" id="n">I\'m on my feet</button></div>';q('#n').onclick=s2}
+function s2(){setStep(2);body.innerHTML='<p class="step-n">Name it</p><h1>This is an urge. It is not you.</h1><p class="say">It\'s not good or bad. It will rise and it will fall. Underneath it is your root: uncertainty about the road ahead. You don\'t fill that gap with this.</p><div class="actions"><button class="btn go" id="n">I\'ve named it</button></div>';q('#n').onclick=s3}
+function s3(){setStep(3);body.innerHTML='<p class="step-n">Create distance</p><h1>Phone away. Lights on.</h1><p class="say">Put the phone in another room, or finish this and switch it off. Get out of the bedroom and the bathroom. Distance breaks the chain.</p><div class="actions"><button class="btn go" id="n">Done, I\'m out of there</button></div>';q('#n').onclick=s4}
+function s4(){
+  setStep(4);let i=Math.floor(Math.random()*moves.length);
+  const draw=()=>{body.innerHTML='<p class="step-n">Move your body</p><h1>Do this right now.</h1><div class="move-card"><strong>'+moves[i][0]+'</strong><span>'+moves[i][1]+'</span></div><div class="actions"><button class="btn go" id="n">Done it</button><button class="btn ghost" id="sw">Give me a different one</button></div>';
+    q('#n').onclick=s5;q('#sw').onclick=()=>{i=(i+1)%moves.length;draw()}};
+  draw();
+}
+function s5(){
+  setStep(5);const nums=store.get('nums',{});
+  const list=brothers.map(n=>nums[n]?'<a href="tel:'+nums[n]+'">'+n+'<small>Call</small></a>':'').join('');
+  body.innerHTML='<p class="step-n">Bring it into the light</p><h1>Call a brother.</h1><p class="say">Secrecy is the enemy\'s greatest weapon. You don\'t have to explain everything. Just say you\'re struggling.</p>'+
+    (list?'<div class="flow-bros">'+list+'</div>':'<p class="say">Add your brothers\' numbers on the Brothers tab so they show up here.</p>')+
+    '<div class="actions"><button class="btn go" id="n">Next</button></div>';q('#n').onclick=s6;
+}
+function s6(){
+  setStep(6);const ph=store.get('photos',[]);
+  body.innerHTML='<p class="step-n">Remember</p><h1>Who you\'re doing it for.</h1>'+
+    (ph.length?'<div class="flow-photos">'+ph.map(()=>'<img alt="Someone you love">').join('')+'</div>':'')+
+    '<p class="why-quote"></p>'+verse('Flee youthful passions and pursue righteousness, faith, love, and peace.','2 Timothy 2:22')+
+    '<div class="actions"><button class="btn go" id="n">I remember</button></div>';
+  body.querySelectorAll('.flow-photos img').forEach((im,k)=>im.src=ph[k]);
+  q('.why-quote').textContent=store.get('why',whyDefault);q('#n').onclick=s7;
+}
+function s7(){
+  setStep(7);let left=600;const C=2*Math.PI*96;
+  body.innerHTML='<p class="step-n">Ride the wave</p><h1>It rises. It falls.</h1><p class="say">Stay up, stay moving, stay away from the phone. Watch it pass.</p>'+
+    '<svg class="ring" viewBox="0 0 220 220"><circle cx="110" cy="110" r="96" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="10"/><circle id="arc" cx="110" cy="110" r="96" fill="none" stroke="#f2b544" stroke-width="10" stroke-linecap="round" transform="rotate(-90 110 110)" stroke-dasharray="'+C+'" stroke-dashoffset="0"/><text x="110" y="124" text-anchor="middle" id="tt">10:00</text></svg>'+
+    '<div class="actions"><button class="btn go" id="won">It\'s passed. I held.</button><button class="btn quiet" id="fell">I fell</button></div>';
+  const arc=q('#arc'),tt=q('#tt');
+  timer=setInterval(()=>{left--;if(left<=0){clearInterval(timer);tt.textContent='0:00';arc.style.strokeDashoffset=C;return}
+    tt.textContent=Math.floor(left/60)+':'+String(left%60).padStart(2,'0');arc.style.strokeDashoffset=C*(1-left/600)},1000);
+  q('#won').onclick=win;q('#fell').onclick=fell;
+}
+function win(){
+  clearInterval(timer);setStep(0);store.set('wins',store.get('wins',0)+1);renderStreak();
+  body.innerHTML='<h1>You held the line.</h1><p class="say">That\'s not willpower. That\'s you fleeing like you said you would. Momentum is your friend now: tell a brother you won tonight, then go to sleep when you said you would.</p>'+
+    verse('Whoever conceals his transgressions will not prosper, but he who confesses and forsakes them will obtain mercy.','Proverbs 28:13')+
+    '<div class="actions"><button class="btn go" id="n">Back home</button></div>';q('#n').onclick=closeFlow;
+}
+function fell(){
+  clearInterval(timer);setStep(0);
+  body.innerHTML='<p class="step-n">Conviction, not condemnation</p><h1>You fell. You are not the fall.</h1><p class="say">Grieve it for how evil it is. Don\'t isolate, don\'t spiral, don\'t let it become your identity. Bring it to the light.</p>'+
+    '<div class="list"><p><b>Now.</b> Confess it to God, honestly.</p><p><b>Within the hour.</b> Tell a brother. Speed, specifics, support.</p><p><b>For 7 days.</b> Go back through the LIGHT method, one letter at a time.</p></div>'+
+    '<div class="actions"><button class="btn go" id="r">Start my 7 day reset</button><button class="btn quiet" id="n">Not now</button></div>';
+  q('#r').onclick=()=>{store.set('since',Date.now());renderStreak();closeFlow();go('method')};q('#n').onclick=closeFlow;
+}
+function closeFlow(){clearInterval(timer);clearInterval(cdTimer);flow.classList.remove('on');document.body.style.overflow=''}
+function q(s){return body.querySelector(s)}
+document.getElementById('panicBtn').onclick=startPanic;
+document.getElementById('flowClose').onclick=closeFlow;
+</script>
+</body>
+</html>
